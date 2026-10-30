@@ -1,0 +1,87 @@
+
+services:
+
+  # PostgreSQL Database
+  database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+
+    container_name: my_postgres
+
+    env_file:
+      - ./database/.env
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - inventory_data:/var/lib/postgresql/data
+
+    networks:
+      - inventory-network
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
+
+
+  # Flask Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: inventory_backend
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "5000:5000"
+
+    depends_on:
+      database:
+        condition: service_healthy
+
+    networks:
+      - inventory-network
+
+    restart: unless-stopped
+
+
+  # Nginx Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: inventory_frontend
+
+    ports:
+      - "3000:80"
+
+    depends_on:
+      - backend
+
+    networks:
+      - inventory-network
+
+    restart: unless-stopped
+
+
+# Persistent Database Storage
+volumes:
+  inventory_data:
+    driver: local
+
+
+# Application Network
+networks:
+  inventory-network:
+    driver: bridge
+      
