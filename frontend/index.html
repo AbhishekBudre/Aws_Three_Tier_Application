@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div>
+            <h1>Inventory Management</h1>
+            <p>Track products, stock levels, and inventory value.</p>
+        </div>
+        <span class="status">Inventory Dashboard</span>
+    </header>
+
+    <main class="container">
+        <section class="summary">
+            <article class="summary-card">
+                <p>Total Products</p>
+                <h2 id="total-products">0</h2>
+            </article>
+
+            <article class="summary-card">
+                <p>Total Units in Stock</p>
+                <h2 id="total-units">0</h2>
+            </article>
+
+            <article class="summary-card">
+                <p>Total Inventory Value</p>
+                <h2 id="total-value">₹0.00</h2>
+            </article>
+        </section>
+
+        <section class="panel">
+            <h2 id="form-title">Add New Product</h2>
+
+            <form id="inventory-form">
+                <input type="hidden" id="item-id">
+
+                <div class="form-grid">
+                    <label>
+                        Product Name
+                        <input
+                            type="text"
+                            id="product-name"
+                            placeholder="Enter product name"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Category
+                        <input
+                            type="text"
+                            id="category"
+                            placeholder="e.g. Electronics"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Quantity
+                        <input
+                            type="number"
+                            id="quantity"
+                            min="0"
+                            step="1"
+                            value="0"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Price (₹)
+                        <input
+                            type="number"
+                            id="price"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            required
+                        >
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submit-button">
+                        Add Product
+                    </button>
+                    <button type="button" id="cancel-button" class="secondary" hidden>
+                        Cancel Edit
+                    </button>
+                </div>
+            </form>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section class="panel">
+            <div class="table-heading">
+                <h2>Product Inventory</h2>
+                <button type="button" id="refresh-button" class="secondary">
+                    Refresh
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Stock Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body">
+                        <tr>
+                            <td colspan="7">Loading inventory...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Inventory Management Dashboard · Flask · PostgreSQL · Docker
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
